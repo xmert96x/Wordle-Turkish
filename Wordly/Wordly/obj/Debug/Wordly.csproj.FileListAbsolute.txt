@@ -1,0 +1,12 @@
+C:\Users\user\source\repos\Wordly\Wordly\bin\Debug\Wordly.exe.config
+C:\Users\user\source\repos\Wordly\Wordly\bin\Debug\Wordly.exe
+C:\Users\user\source\repos\Wordly\Wordly\bin\Debug\Wordly.pdb
+C:\Users\user\source\repos\Wordly\Wordly\obj\Debug\Wordly.csproj.AssemblyReference.cache
+C:\Users\user\source\repos\Wordly\Wordly\obj\Debug\Wordly.csproj.SuggestedBindingRedirects.cache
+C:\Users\user\source\repos\Wordly\Wordly\obj\Debug\Wordly.Properties.Resources.resources
+C:\Users\user\source\repos\Wordly\Wordly\obj\Debug\Wordly.csproj.GenerateResource.cache
+C:\Users\user\source\repos\Wordly\Wordly\obj\Debug\Wordly.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\Wordly\Wordly\obj\Debug\Wordly.exe
+C:\Users\user\source\repos\Wordly\Wordly\obj\Debug\Wordly.pdb
+C:\Users\user\source\repos\Wordly\Wordly\obj\Debug\Wordly.Homepage.resources
+C:\Users\user\source\repos\Wordly\Wordly\obj\Debug\Wordly.Game_Area.resources
