@@ -15,12 +15,17 @@ namespace Wordly
         List<TextBox> buttons = new List<TextBox>();
         List<TextBox> buttons2 = new List<TextBox>();
         List<String> Words = new List<String>();
-        string ans = "araba";
+        string ans = "kitap";
+        public Color bgcolor;
+        public Color textcolor;
+
         public Game_Area()
         {
             InitializeComponent();
             ans=ans.ToUpper();
             button1.Enabled = false;
+            var bgcolor = textBox1.BackColor;
+            var textcolor = textBox1.ForeColor;
             foreach (TextBox test in groupBox1.Controls)
             {
                 TextBox btn = (TextBox)test; buttons.Add(test);
@@ -140,29 +145,26 @@ namespace Wordly
                         if (word2[j] == ans2[i] && word2[i] != '1') { word2[j] = '0'; break; }
                     } 
                 }
-
-
                 int k = 0; var correct=0;
                 for (int i = count - 5; i < count; i++)
                 {
                     if (word2[k] == '1') {  buttons[i].ForeColor = Color.White; buttons[i].BackColor = Color.Green; correct++;  }
                     if (word2[k] == '0') { ForeColor = Color.White;  buttons[i].BackColor = Color.Orange;  }
                     k++;
-
-
                 }
-
-                if (correct == 5) { MessageBox.Show("Doğru Buldunuz"); }
                 Console.WriteLine(word2);
-                for (int i = count; i < count + 5 && i < 25; i++)
+                if (correct != 5)
                 {
-                    buttons[i].ReadOnly = false;
-                }   
-                for (int i = 0; i < count; i++)
-                {
-                    buttons[i].ReadOnly = true;
-                }
-                this.ActiveControl = (count < 25) ? buttons[count] : buttons[24];
+                    for (int i = count; i < count + 5 && i < 25; i++)
+                    {
+                        buttons[i].ReadOnly = false;
+                    }
+                    for (int i = 0; i < count; i++)
+                    {
+                        buttons[i].ReadOnly = true;
+                    }
+                    this.ActiveControl = (count < 25) ? buttons[count] : buttons[24]; }
+                else{MessageBox.Show("Doğru Buldunuz"); initialize(); }
                 button1.Enabled = false;
             }
             else {  result=MessageBox.Show("Aynı Kelimeyi Daha Önce Girdiniz Lütfen Değiştirip Giriniz.","Hata",MessageBoxButtons.OK,MessageBoxIcon.Error); }
@@ -175,5 +177,16 @@ namespace Wordly
                 this.ActiveControl=buttons[(count - 5)];
             }
         }
+        private void initialize()
+        {
+            ans = "araba";
+            ans = ans.ToUpper();
+            for (int i=0; i<5; i++) { buttons[i].Text = null; buttons[i].ReadOnly = default;   buttons[i].BackColor= bgcolor; buttons[i].ForeColor=textcolor;  }
+            for (int i = 5; i < 25; i++) { buttons[i].Text = null; buttons[i].ReadOnly = true;   buttons[i].BackColor = bgcolor; buttons[i].ForeColor = textcolor; }
+            Words.Clear();
+            button1.Enabled = false;
+            this.ActiveControl = textBox1;
+        }
     }
 }
+ 
