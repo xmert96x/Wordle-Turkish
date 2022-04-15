@@ -18,20 +18,19 @@ namespace Wordly
         string ans = "kitap";
         public Color bgcolor;
         public Color textcolor;
-
         public Game_Area()
         {
             InitializeComponent();
-            ans=ans.ToUpper();
+            ans = ans.ToUpper();
             button1.Enabled = false;
             var bgcolor = textBox1.BackColor;
             var textcolor = textBox1.ForeColor;
             foreach (TextBox test in groupBox1.Controls)
             {
-                TextBox btn = (TextBox)test; buttons.Add(test);
+                buttons.Add(test);
             }
             for (int i = 0; i < buttons.Count; i++)
-            {
+            {       
                 buttons[buttons.Count - 1 - i].TextChanged += new System.EventHandler(this.next);
                 buttons[buttons.Count - 1 - i].KeyDown += new System.Windows.Forms.KeyEventHandler(this.prev);
                 if (buttons.Count - 1 - i < 20) { buttons[buttons.Count - 1 - i].ReadOnly = true; }
@@ -67,27 +66,27 @@ namespace Wordly
                 if (i * 5 < number) count = i + 1;
             }
             for (int i = (count - 1) * 5; i < count * 5; i++)
-            {
+            {   
                 word += buttons[i].Text;
             }
-            button1.Enabled = (word.Length == 5) ? true : false;
+            button1.Enabled = (word.Length == 5);
         }
         private void prev(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             TextBox box = (TextBox)sender;
             int number = get_number(box.Name);
-            if (box.Text.Length == 0 && number % 5 != 1 && e.KeyCode.ToString() == "Back")
-            {
-                this.ActiveControl = buttons[number - 2];
-            }
             if (button1.Enabled == true && e.KeyCode == Keys.Enter) { button1_Click(button1, e); }
+            if (box.Text.Length == 0 && number % 5 != 1 && e.KeyCode.ToString() == "Back") { this.ActiveControl = buttons[number - 2]; }
+            if (e.KeyCode == Keys.Left && number % 5 != 1) { this.ActiveControl = buttons[number - 2]; position(number - 2); }
+            if (e.KeyCode == Keys.Right && number % 5 != 0) { this.ActiveControl = buttons[number]; position(number); }
+            if ((e.KeyCode == Keys.Left && number % 5 == 1) || (e.KeyCode == Keys.Right && number % 5 == 0)) { position(number - 1); }
         }
         private int get_number(string text)
         {
             int number = 0;
             string b = string.Empty;
             for (int i = 0; i < text.Length; i++)
-            {
+            {   
                 if (Char.IsDigit(text[i]))
                     b += text[i];
             }
@@ -96,21 +95,17 @@ namespace Wordly
         private bool test_letter(string text)
         {
             text = text.Trim().ToUpper();
-            string[] letters = new[] { "ğ", "ç", "ş", "ü", "ö", "ı", "Ğ", "Ç", "Ş", "Ü", "Ö", "İ" };
-            Regex r = new Regex("^[A-Z ]+$");
+            string[] tr_letters = new[] { "Ğ", "Ç", "Ş", "Ü", "Ö", "İ" };
+            string[] en_letters = new[] { "X", "Q", "W" };
+            Regex r = new Regex("^[A-Z]+$");
             bool check;
-            return check = (letters.Any(text.Contains) || r.IsMatch(text)) ? true : false;
-        }
-        public TextBox color(TextBox box)
-        {
-            box.BackColor = Color.Red;
-            return box;
+            return check = (tr_letters.Any(text.Contains) || r.IsMatch(text)) && !en_letters.Any(text.Contains);
         }
         private void button1_Click(object sender, EventArgs e)
         {
             char[] ans2 = ans.ToArray();
             char[] word2;
-                       var result = DialogResult.No;
+            var result = DialogResult.No;
             Console.WriteLine(e.ToString());
             bool eq = false;
             string word = "";
@@ -123,7 +118,7 @@ namespace Wordly
             {
                 word += buttons[i].Text;
             }
-            word2=word.ToArray();
+            word2 = word.ToArray();
             Control box = (Control)this.ActiveControl;
             Console.WriteLine(word.ToString());
             foreach (string cpm in Words)
@@ -133,24 +128,26 @@ namespace Wordly
             if (eq != true)
             {
                 Words.Add(word);
-                for (int i = count - 5;  i < count; i++)
-                {
-                    word += buttons[i].Text;
-                }
-                for (int i = 0; i < 5; i++)
+                var correct = 0;
+              /*  for (int i = 0; i < 5; i++)
                 {
                     if (word[i] == ans2[i]) word2[i] = '1';
                     for (int j = 0; j < 5; j++)
                     {
                         if (word2[j] == ans2[i] && word2[i] != '1') { word2[j] = '0'; break; }
-                    } 
-                }
-                int k = 0; var correct=0;
-                for (int i = count - 5; i < count; i++)
+                    }
+                }*/
+               
+                for (int i = count - 5, k = 0; i < count; i++, k++)
                 {
-                    if (word2[k] == '1') {  buttons[i].ForeColor = Color.White; buttons[i].BackColor = Color.Green; correct++;  }
-                    if (word2[k] == '0') { ForeColor = Color.White;  buttons[i].BackColor = Color.Orange;  }
-                    k++;
+                    if (word[k] == ans2[k]) { buttons[i].ForeColor = Color.White; buttons[i].BackColor = Color.Green; correct++; }
+                    else
+                    {
+                        for (int j = 0; j < 5; j++)
+                        {
+                            if (word[j] == ans2[k] && buttons[i].BackColor != Color.Green) { buttons[count - 5 + j].ForeColor = Color.White; buttons[count - 5 + j].BackColor = Color.Orange; break; }
+                        }
+                    }
                 }
                 Console.WriteLine(word2);
                 if (correct != 5)
@@ -163,30 +160,37 @@ namespace Wordly
                     {
                         buttons[i].ReadOnly = true;
                     }
-                    this.ActiveControl = (count < 25) ? buttons[count] : buttons[24]; }
-                else{MessageBox.Show("Doğru Buldunuz"); initialize(); }
+                    this.ActiveControl = (count < 25) ? buttons[count] : buttons[24];
+                }
+                else { MessageBox.Show("Doğru Buldunuz"); initialize(false); }
                 button1.Enabled = false;
             }
-            else {  result=MessageBox.Show("Aynı Kelimeyi Daha Önce Girdiniz Lütfen Değiştirip Giriniz.","Hata",MessageBoxButtons.OK,MessageBoxIcon.Error); }
+            else { result = MessageBox.Show("Aynı Kelimeyi Daha Önce Girdiniz Lütfen Değiştirip Giriniz.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             if (result == DialogResult.OK)
             {
                 for (int i = count - 5; i < count; i++)
                 {
-                    buttons[i].Text=null;
+                    buttons[i].Text = null;
                 }
-                this.ActiveControl=buttons[(count - 5)];
+                this.ActiveControl = buttons[(count - 5)];
             }
+            if (count == 25) { MessageBox.Show("Tekrar Deneyiniz", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error); initialize(true); }
         }
-        private void initialize()
+        private void initialize(bool again)
         {
-            ans = "araba";
+            ans = (again == true) ? ans : ans = "kalem";
             ans = ans.ToUpper();
-            for (int i=0; i<5; i++) { buttons[i].Text = null; buttons[i].ReadOnly = default;   buttons[i].BackColor= bgcolor; buttons[i].ForeColor=textcolor;  }
-            for (int i = 5; i < 25; i++) { buttons[i].Text = null; buttons[i].ReadOnly = true;   buttons[i].BackColor = bgcolor; buttons[i].ForeColor = textcolor; }
+            for (int i = 0; i < 5; i++) { buttons[i].Text = null; buttons[i].ReadOnly = default; buttons[i].BackColor = bgcolor; buttons[i].ForeColor = textcolor; }
+            for (int i = 5; i < 25; i++) { buttons[i].Text = null; buttons[i].ReadOnly = true; buttons[i].BackColor = bgcolor; buttons[i].ForeColor = textcolor; }
             Words.Clear();
             button1.Enabled = false;
             this.ActiveControl = textBox1;
         }
+
+        private void position(int number)
+        {
+            buttons[number].SelectionStart = buttons[number].Text.Length;
+            buttons[number].SelectionLength = 0;
+        }
     }
 }
- 
