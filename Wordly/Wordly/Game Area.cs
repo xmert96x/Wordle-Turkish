@@ -15,7 +15,7 @@ namespace Wordly
         List<TextBox> buttons = new List<TextBox>();
         List<TextBox> buttons2 = new List<TextBox>();
         List<String> Words = new List<String>();
-        string ans = "kitap";
+        string ans = "kabak";
         public Color bgcolor;
         public Color textcolor;
         public Game_Area()
@@ -104,7 +104,6 @@ namespace Wordly
         private void button1_Click(object sender, EventArgs e)
         {
             char[] ans2 = ans.ToArray();
-            char[] word2;
             var result = DialogResult.No;
             Console.WriteLine(e.ToString());
             bool eq = false;
@@ -118,7 +117,6 @@ namespace Wordly
             {
                 word += buttons[i].Text;
             }
-            word2 = word.ToArray();
             Control box = (Control)this.ActiveControl;
             Console.WriteLine(word.ToString());
             foreach (string cpm in Words)
@@ -129,15 +127,6 @@ namespace Wordly
             {
                 Words.Add(word);
                 var correct = 0;
-              /*  for (int i = 0; i < 5; i++)
-                {
-                    if (word[i] == ans2[i]) word2[i] = '1';
-                    for (int j = 0; j < 5; j++)
-                    {
-                        if (word2[j] == ans2[i] && word2[i] != '1') { word2[j] = '0'; break; }
-                    }
-                }*/
-               
                 for (int i = count - 5, k = 0; i < count; i++, k++)
                 {
                     if (word[k] == ans2[k]) { buttons[i].ForeColor = Color.White; buttons[i].BackColor = Color.Green; correct++; }
@@ -145,12 +134,11 @@ namespace Wordly
                     {
                         for (int j = 0; j < 5; j++)
                         {
-                            if (word[j] == ans2[k] && buttons[i].BackColor != Color.Green) { buttons[count - 5 + j].ForeColor = Color.White; buttons[count - 5 + j].BackColor = Color.Orange; break; }
+                            if (word[j] == ans2[k] && buttons[count - 5 + j].BackColor == SystemColors.Window) {Console.WriteLine(buttons[i].BackColor.ToString());  buttons[count - 5 + j].ForeColor = Color.White; buttons[count - 5 + j].BackColor = Color.Orange; break; }
                         }
                     }
-                }
-                Console.WriteLine(word2);
-                if (correct != 5)
+                } 
+                if (correct!= 5)
                 {
                     for (int i = count; i < count + 5 && i < 25; i++)
                     {
@@ -186,7 +174,6 @@ namespace Wordly
             button1.Enabled = false;
             this.ActiveControl = textBox1;
         }
-
         private void position(int number)
         {
             buttons[number].SelectionStart = buttons[number].Text.Length;
