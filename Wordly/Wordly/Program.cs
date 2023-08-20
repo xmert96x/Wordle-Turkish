@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
+
+using System;
 using System.Windows.Forms;
 
 namespace Wordly
@@ -14,9 +13,13 @@ namespace Wordly
         [STAThread]
         static void Main()
         {
+            PlayerManager.player.WordLength = 5;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Homepage());
+ 
+            Application.Run(new Game_Area());
+
+
         }
     }
 }
